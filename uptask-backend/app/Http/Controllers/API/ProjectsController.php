@@ -4,48 +4,39 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Project\StoreRequest;
+use App\Http\Requests\Project\UpdateRequest;
+use App\Http\Resources\ProjectCollection;
 use App\Models\Project;
-use Illuminate\Http\Request;
 
 class ProjectsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index()
     {
-        return response()->json('desde ProjectsController');
+        return new ProjectCollection(Project::all());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreRequest $request)
     {
-        return response()->json($request->validated());
+        $data = $request->validated();
+        return response()->json(['data' => Project::create($data)]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Project $project)
+    public function show(string $projectId)
     {
-        //
+        $project = Project::find($projectId);
+        return response()->json(['project' => $project, 'tasks' => $project->tasks]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Project $project)
+    public function update(UpdateRequest $request, string $projectId)
     {
-        //
+        $project = Project::where('id', $projectId)->update($request->validated());
+        return response()->json(['data' => $project]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Project $project)
+    public function destroy(string $projectId)
     {
-        //
+        $project = Project::where('id', $projectId)->delete();
+        return response()->json(['data' => $project]);
     }
 }

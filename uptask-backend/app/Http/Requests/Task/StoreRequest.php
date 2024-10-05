@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Requests\Project;
+namespace App\Http\Requests\Task;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     */
     public function authorize(): bool
     {
         return true;
@@ -14,8 +17,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'project_name' => 'required',
-            'client_name' => 'required',
+            'name' => 'required',
             'description' => 'required',
         ];
     }
@@ -23,8 +25,7 @@ class StoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'project_name.required' => 'El nombre del proyecto es obligatorio',
-            'client_name.required' => 'El nombre del cliente es obligatorio',
+            'name.required' => 'El nombre de la tarea es obligatoria',
             'description.required' => 'La descripcion es obligatoria',
         ];
     }
