@@ -36,7 +36,7 @@ class TaskController extends Controller
             'project_id' => $project->id
         ]);
 
-        return response()->json(['data' => $task, 'message' => 'Created task succesfull'], 201);
+        return response()->json(['data' => $task, 'message' => 'Created task succesful'], 201);
     }
 
     /**

@@ -19,7 +19,7 @@ class ProjectsController extends Controller
     public function store(StoreRequest $request)
     {
         $data = $request->validated();
-        return response()->json(['data' => Project::create($data)]);
+        return response()->json(['data' => Project::create($data), 'message' => 'Created project succesful'], 201);
     }
 
     public function show(string $projectId)
@@ -31,12 +31,12 @@ class ProjectsController extends Controller
     public function update(UpdateRequest $request, string $projectId)
     {
         $project = Project::where('id', $projectId)->update($request->validated());
-        return response()->json(['data' => $project]);
+        return response()->json(['data' => $project, 'message' => 'Updated project succesful']);
     }
 
     public function destroy(string $projectId)
     {
         $project = Project::where('id', $projectId)->delete();
-        return response()->json(['data' => $project]);
+        return response()->json(['data' => $project, 'message' => 'Deleted project succesful']);
     }
 }
