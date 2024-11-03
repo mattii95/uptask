@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ProjectsController;
 use App\Http\Controllers\API\TaskController;
 use App\Http\Middleware\ProjectMiddleware;
@@ -10,6 +11,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+// Routes Auth
+Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/confirm-account', [AuthController::class, 'verify2FACode']);
+Route::post('/auth/request-code', [AuthController::class, 'requestCofirmationCode']);
+Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/auth/validate-token', [AuthController::class, 'validateToken']);
+Route::post('/auth/update-password/{token}', [AuthController::class, 'validateToken']);
 
 // Routes Projects
 Route::controller(ProjectsController::class)->middleware([ProjectMiddleware::class])->group(function () {
