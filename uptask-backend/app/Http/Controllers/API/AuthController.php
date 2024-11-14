@@ -109,11 +109,13 @@ class AuthController extends Controller
                 response()->json(['error' => 'Invalid credentials'], 401);
             }
 
-            // Si no tiene 2FA activado, generar el token
-            // $token = $user->createToken('authToken')->plainTextToken;
+            // Genera el Token
+            $token = $user->createToken('authToken')->plainTextToken;
 
             return response()->json([
-                'user' => $user
+                'user' => $user,
+                'token' => $token,
+                'type' => 'Bearer'
             ]);
         }
 
@@ -200,7 +202,7 @@ class AuthController extends Controller
 
     }
 
-    public function validateToken(Request $request) {
+    public function validate2FACode(Request $request) {
         $validate = $request->validate([
             'two_factor_code' => 'required|numeric'
         ]);

@@ -1,4 +1,4 @@
-import { validateToken } from '@/services/AuthService';
+import { validate2FACode } from '@/services/AuthService';
 import { Confirm2FA } from '@/types/index';
 import { PinInput, PinInputField } from '@chakra-ui/pin-input';
 import { useMutation } from '@tanstack/react-query';
@@ -13,7 +13,7 @@ type NewPasswordTokenProps = {
 
 export default function NewPasswordToken({ token, setToken, setIsValidToken }: NewPasswordTokenProps) {
     const { mutate } = useMutation({
-        mutationFn: validateToken,
+        mutationFn: validate2FACode,
         onError: (error) => {
             toast.error(error.message)
         },

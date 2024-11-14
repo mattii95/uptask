@@ -43,6 +43,7 @@ export async function login(formData: UserLoginForm) {
     try {
         const url = '/auth/login'
         const { data } = await api.post(url, formData)
+        localStorage.setItem('AUTH_TOKEN', data.token)
         return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
@@ -63,9 +64,9 @@ export async function forgotPassword(formData: ForgotPasswordForm) {
     }
 }
 
-export async function validateToken(formData: Confirm2FA) {
+export async function validate2FACode(formData: Confirm2FA) {
     try {
-        const url = '/auth/validate-token'
+        const url = '/auth/validate-2fa-code'
         const { data } = await api.post(url, formData)
         return data
     } catch (error) {
