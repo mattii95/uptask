@@ -240,7 +240,7 @@ class AuthController extends Controller
         User::where('id', $user->id)->update([
             'two_factor_code' => $code,
             'two_factor_expires_at' => now()->addMinutes(15),
-            'password' => bcrypt($data['password']), 
+            'password' => bcrypt($validate['password']), 
         ]);
 
         // Datos para el email

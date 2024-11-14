@@ -4,8 +4,14 @@ import { dashboardProjectSchema, Project, ProjectFormData } from "../types";
 import { isAxiosError } from "axios";
 
 export async function createProject(formData: ProjectFormData) {
+    const token = localStorage.getItem('AUTH_TOKEN');
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    }
     try {
-        const { data } = await api.post('/projects', formData)
+        const { data } = await api.post('/projects', formData, config)
         return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
@@ -37,8 +43,14 @@ export async function getProjects() {
 }
 
 export async function getProjectById(id: Project['id']) {
+    const token = localStorage.getItem('AUTH_TOKEN');
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    }
     try {
-        const { data } = await api(`/projects/${id}`)
+        const { data } = await api(`/projects/${id}`, config)
         return data.project
     } catch (error) {
         if (isAxiosError(error) && error.response) {
@@ -54,8 +66,14 @@ type ProjectServiceType = {
 }
 
 export async function updateProject({ formData, projectId }: ProjectServiceType) {
+    const token = localStorage.getItem('AUTH_TOKEN');
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    }
     try {
-        const { data } = await api.put(`/projects/${projectId}`, formData)
+        const { data } = await api.put(`/projects/${projectId}`, formData, config)
         return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
@@ -66,8 +84,14 @@ export async function updateProject({ formData, projectId }: ProjectServiceType)
 }
 
 export async function deleteProject(id: Project['id']) {
+    const token = localStorage.getItem('AUTH_TOKEN');
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+        },
+    }
     try {
-        const { data } = await api.delete(`/projects/${id}`)
+        const { data } = await api.delete(`/projects/${id}`, config)
         return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
