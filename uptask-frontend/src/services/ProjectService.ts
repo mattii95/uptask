@@ -1,17 +1,15 @@
-
 import api from "@/lib/axios";
 import { dashboardProjectSchema, Project, ProjectFormData } from "../types";
 import { isAxiosError } from "axios";
 
+type ProjectServiceType = {
+    formData: ProjectFormData,
+    projectId: Project['id']
+}
+
 export async function createProject(formData: ProjectFormData) {
-    const token = localStorage.getItem('AUTH_TOKEN');
-    const config = {
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
-    }
     try {
-        const { data } = await api.post('/projects', formData, config)
+        const { data } = await api.post('/projects', formData)
         return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
@@ -22,14 +20,8 @@ export async function createProject(formData: ProjectFormData) {
 }
 
 export async function getProjects() {
-    const token = localStorage.getItem('AUTH_TOKEN');
-    const config = {
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
-    }
     try {
-        const { data } = await api('/projects', config)
+        const { data } = await api('/projects')
         const response = dashboardProjectSchema.safeParse(data.data)
         if (response.success) {
             return response.data
@@ -43,14 +35,8 @@ export async function getProjects() {
 }
 
 export async function getProjectById(id: Project['id']) {
-    const token = localStorage.getItem('AUTH_TOKEN');
-    const config = {
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
-    }
     try {
-        const { data } = await api(`/projects/${id}`, config)
+        const { data } = await api(`/projects/${id}`)
         return data.project
     } catch (error) {
         if (isAxiosError(error) && error.response) {
@@ -60,20 +46,9 @@ export async function getProjectById(id: Project['id']) {
 
 }
 
-type ProjectServiceType = {
-    formData: ProjectFormData,
-    projectId: Project['id']
-}
-
 export async function updateProject({ formData, projectId }: ProjectServiceType) {
-    const token = localStorage.getItem('AUTH_TOKEN');
-    const config = {
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
-    }
     try {
-        const { data } = await api.put(`/projects/${projectId}`, formData, config)
+        const { data } = await api.put(`/projects/${projectId}`, formData)
         return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
@@ -84,14 +59,8 @@ export async function updateProject({ formData, projectId }: ProjectServiceType)
 }
 
 export async function deleteProject(id: Project['id']) {
-    const token = localStorage.getItem('AUTH_TOKEN');
-    const config = {
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
-    }
     try {
-        const { data } = await api.delete(`/projects/${id}`, config)
+        const { data } = await api.delete(`/projects/${id}`)
         return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
