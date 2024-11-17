@@ -22,6 +22,8 @@ Route::post('/auth/validate-2fa-code', [AuthController::class, 'validate2FACode'
 Route::post('/auth/update-password/{token}', [AuthController::class, 'updatePassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
+    
     // Routes Projects
     Route::controller(ProjectsController::class)->middleware([ProjectMiddleware::class])->group(function () {
         Route::get('/projects', 'index')->name('projects.index')->withoutMiddleware([ProjectMiddleware::class]);
