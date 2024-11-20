@@ -23,4 +23,9 @@ class Project extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    public function collaborators()
+    {
+        return $this->belongsToMany(User::class, 'project_teams');
+    }
 }

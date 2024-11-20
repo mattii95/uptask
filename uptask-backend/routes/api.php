@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ProjectsController;
 use App\Http\Controllers\API\TaskController;
+use App\Http\Controllers\API\TeamController;
 use App\Http\Middleware\ProjectMiddleware;
 use App\Http\Middleware\TaskMiddleware;
 use Illuminate\Http\Request;
@@ -41,6 +42,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/projects/{projectId}/tasks/{taskId}', 'update')->name('tasks.update');
         Route::delete('/projects/{projectId}/tasks/{taskId}', 'destroy')->name('tasks.destroy');
         Route::put('/projects/{projectId}/tasks/{taskId}/status', 'updateStatus')->name('tasks.updateStatus');
+    });
+
+    // Routes Teams
+    Route::controller(TeamController::class)->middleware([ProjectMiddleware::class])->group(function () {
+        Route::post('/projects/{projectId}/team', 'store');
+        Route::get('/projects/{projectId}/team', 'getProjectTeam');
+        Route::post('/projects/{projectId}/team/find', 'findMemberByEmail');
+        Route::delete('/projects/{projectId}/team', 'removeMemberById');
     });
 });
 
