@@ -49,7 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/projects/{projectId}/team', 'store');
         Route::get('/projects/{projectId}/team', 'getProjectTeam');
         Route::post('/projects/{projectId}/team/find', 'findMemberByEmail');
-        Route::delete('/projects/{projectId}/team', 'removeMemberById');
+        Route::delete('/projects/{projectId}/team/{userId}', 'removeMemberById');
     });
 });
 

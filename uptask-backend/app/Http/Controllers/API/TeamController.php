@@ -50,19 +50,15 @@ class TeamController extends Controller
         return response()->json($user);
     }
 
-    public function removeMemberById(string $projectId, Request $request) {
-        $validate = $request->validate([
-            'user_id' => 'required|exists:users,id'
-        ]);
-
+    public function removeMemberById(string $projectId, string $userId) {
         $project = Project::findOrFail($projectId);
 
-        $exists = $project->collaborators()->where('user_id', $validate['user_id'])->exists();
+        $exists = $project->collaborators()->where('user_id', $userId)->exists();
         if (!$exists) {
             return response()->json(['error' => 'El usuario no existe en el proyecto'], 422);
         }
 
-        $project->collaborators()->detach($validate['user_id']);
+        $project->collaborators()->detach($userId);
 
         return response()->json('Colaborador eliminado exitosamente');
 
