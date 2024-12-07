@@ -49,7 +49,7 @@ class TaskController extends Controller
      */
     public function show(string $projectId, string $taskId)
     {
-        $task = Task::find($taskId);
+        $task = Task::with(['completedByUser:id,name,email'])->find($taskId);
 
         if(!Gate::allows('view', $task)) {
             return response()->json(['error' => 'Unauthorized access task'], 403);
@@ -110,7 +110,12 @@ class TaskController extends Controller
             return response()->json(['error' => 'Invalid action'], 400);
         }
 
-        $task->update(['status' => $request->status]);
+        $completedBy = auth()->user()->id;
+        if ($request->status == 'pending') {
+            $completedBy = null;
+        }
+
+        $task->update(['status' => $request->status, 'completed_by' => $completedBy]);
         return response()->json(['data' => $task, 'message' => 'Updated status successful']);
     }
 }

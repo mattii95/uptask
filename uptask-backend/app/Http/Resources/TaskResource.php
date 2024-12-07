@@ -21,6 +21,7 @@ class TaskResource extends JsonResource
             'status' => $this->status,
             'project_id' => $this->project_id,
             'project' => $this->project,
+            'completed_by' => $this->completed_by,
         ];
     }
 }
