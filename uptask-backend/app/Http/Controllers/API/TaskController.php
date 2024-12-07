@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Task;
+use App\Models\Project;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\TaskCollection;
 use App\Http\Requests\Task\StoreRequest;
 use App\Http\Requests\Task\UpdateRequest;
-use App\Http\Resources\TaskCollection;
-use App\Models\Project;
-use App\Models\Task;
-use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -27,8 +28,12 @@ class TaskController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(string $projectId, StoreRequest $request)
-    {
+    {        
         $project = Project::where('id', $projectId)->first();
+
+        if(auth()->user()->id !== $project->user_id) {
+            return response()->json(['error' => 'Unauthorized access task'], 403);
+        }
 
         $task = Task::create([
             'name' => $request->name,
@@ -45,6 +50,11 @@ class TaskController extends Controller
     public function show(string $projectId, string $taskId)
     {
         $task = Task::find($taskId);
+
+        if(!Gate::allows('view', $task)) {
+            return response()->json(['error' => 'Unauthorized access task'], 403);
+        }
+
         if (intval($projectId) !== $task->project->id) {
             return response()->json(['error' => 'Invalid action'], 400);
         }
@@ -57,6 +67,11 @@ class TaskController extends Controller
     public function update(string $projectId, UpdateRequest $request, string $taskId)
     {
         $task = Task::find($taskId);
+
+        if(!Gate::allows('update', $task)) {
+            return response()->json(['error' => 'Unauthorized access task'], 403);
+        }
+
         if (intval($projectId) !== $task->project->id) {
             return response()->json(['error' => 'Invalid action'], 400);
         }
@@ -70,6 +85,11 @@ class TaskController extends Controller
     public function destroy(string $projectId, string $taskId)
     {
         $task = Task::find($taskId);
+        
+        if(!Gate::allows('delete', $task)) {
+            return response()->json(['error' => 'Unauthorized access task'], 403);
+        }
+
         if (intval($projectId) !== $task->project->id) {
             return response()->json(['error' => 'Invalid action'], 400);
         }

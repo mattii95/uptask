@@ -14,7 +14,7 @@ class ProjectPolicy
 
     public function show(User $user, Project $project) : bool 
     {
-        return $user->id == $project->user_id;
+        return $user->id == $project->user_id || $project->collaborators->contains($user->id);
     }
 
     public function update(User $user, Project $project) : bool

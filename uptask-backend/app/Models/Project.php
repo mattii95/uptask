@@ -14,6 +14,7 @@ class Project extends Model
         'project_name',
         'client_name',
         'description',
+        'user_id'
     ];
 
     public function tasks() {

@@ -14,7 +14,7 @@ class ProjectsController extends Controller
     
     public function index()
     {
-        $projects = auth()->user()->projects;
+        $projects = auth()->user()->projects->merge(auth()->user()->assignedProjects);
         return new ProjectCollection($projects);
     }
 
@@ -27,13 +27,13 @@ class ProjectsController extends Controller
 
     public function show(string $projectId)
     {
-        $project = Project::find($projectId);
+        $project = Project::with('tasks')->find($projectId);
 
         if(!Gate::allows('show', $project)) {
             return response()->json(['error' => 'Unauthorized access'], 403);
         }
 
-        return response()->json(['project' => $project, 'tasks' => $project->tasks]);
+        return response()->json(['data' => $project]);
     }
 
     public function update(UpdateRequest $request, string $projectId)

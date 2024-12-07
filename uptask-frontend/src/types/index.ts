@@ -50,6 +50,8 @@ export const projectSchema = z.object({
     project_name: z.string(),
     client_name: z.string(),
     description: z.string(),
+    user_id: z.number(),
+    tasks: z.array(taskSchema)
 })
 
 export const dashboardProjectSchema = z.array(
@@ -58,6 +60,7 @@ export const dashboardProjectSchema = z.array(
         project_name: true,
         client_name: true,
         description: true,
+        user_id: true,
     })
 )
 
