@@ -4,7 +4,6 @@ import { UserLoginForm } from "@/types/index";
 import ErrorMessage from "@/components/ErrorMessage";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@/services/AuthService";
-import { toast } from "react-toastify";
 
 export default function LoginView() {
 

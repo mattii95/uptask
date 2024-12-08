@@ -1,7 +1,7 @@
 import NewPasswordForm from '@/components/auth/NewPasswordForm'
 import NewPasswordToken from '@/components/auth/NewPasswordToken'
 import { Confirm2FA } from '@/types/index'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 export default function NewPasswordView() {
     const [token, setToken] = useState<Confirm2FA['two_factor_code']>('')
