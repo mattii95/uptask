@@ -49,7 +49,7 @@ class TaskController extends Controller
      */
     public function show(string $projectId, string $taskId)
     {
-        $task = Task::with(['completedByUser:id,name,email'])->find($taskId);
+        $task = Task::with(['completedByUser:id,name,email', 'notes'])->find($taskId);
 
         if(!Gate::allows('view', $task)) {
             return response()->json(['error' => 'Unauthorized access task'], 403);

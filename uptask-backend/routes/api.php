@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\ProjectsController;
-use App\Http\Controllers\API\TaskController;
-use App\Http\Controllers\API\TeamController;
-use App\Http\Middleware\ProjectMiddleware;
-use App\Http\Middleware\TaskMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\TaskMiddleware;
+use App\Http\Middleware\ProjectMiddleware;
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\NoteController;
+use App\Http\Controllers\API\TaskController;
+use App\Http\Controllers\API\TeamController;
+use App\Http\Controllers\API\ProjectsController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -50,6 +51,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/projects/{projectId}/team', 'getProjectTeam');
         Route::post('/projects/{projectId}/team/find', 'findMemberByEmail');
         Route::delete('/projects/{projectId}/team/{userId}', 'removeMemberById');
+    });
+
+    // Routes Notes
+    Route::controller(NoteController::class)->middleware([ProjectMiddleware::class, TaskMiddleware::class])->group(function () {
+        Route::post('/projects/{projectId}/tasks/{taskId}/notes', 'store');
+        Route::get('/projects/{projectId}/tasks/{taskId}/notes', 'index');
+        Route::delete('/projects/{projectId}/tasks/{taskId}/notes/{noteId}', 'destroy');
     });
 });
 
