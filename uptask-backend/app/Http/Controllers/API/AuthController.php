@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -105,8 +106,8 @@ class AuthController extends Controller
             }
 
             // Revisar password
-            if (Hash::check($request->password, $user->password)) {
-                response()->json(['error' => 'Invalid credentials'], 401);
+            if (!Hash::check($request->password, $user->password)) {
+                return response()->json(['error' => 'Invalid credentials'], 401);
             }
 
             // Genera el Token
@@ -266,5 +267,48 @@ class AuthController extends Controller
         $user = $request->user();
         $user->currentAccessToken()->delete();
         return response()->json('ok');
+    }
+
+    public function updateProfile(Request $request) {
+        $user = auth()->user();
+
+        $validate = $request->validate([
+            'name' => 'required',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($user->id)
+            ],
+        ]);
+
+        $user->update([
+            'name' => $validate['name'],
+            'email' => $validate['email'],
+        ]);
+
+        return response()->json('Profile updated successfully');
+    }
+
+    public function updateCurrentUserPassword(Request $request) {
+        $user = auth()->user();
+        $validate = $request->validate([
+            'current_password' => 'required',
+            'password' => [
+                'required',
+                'confirmed',
+                PasswordRules::min(8)->letters()->symbols()->numbers()
+            ]
+        ]);
+
+        // Revisar password
+        if (!Hash::check($validate['current_password'], $user->password)) {
+            return response()->json(['error' => 'Invalid credentials'], 401);
+        }
+        
+        $user->update([
+            'password' => bcrypt($validate['password'])
+        ]);
+
+        return response()->json('Password update');
     }
 }

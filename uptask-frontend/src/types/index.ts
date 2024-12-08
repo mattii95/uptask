@@ -7,6 +7,7 @@ const authSchema = z.object({
     password: z.string(),
     password_confirmation: z.string(),
     two_factor_code: z.string(),
+    current_password: z.string()
 })
 
 type Auth = z.infer<typeof authSchema>
@@ -16,6 +17,7 @@ export type RequestConfirmationCodeForm = Pick<Auth, 'email'>
 export type Confirm2FA = Pick<Auth, 'two_factor_code'>
 export type ForgotPasswordForm = Pick<Auth, 'email'>
 export type NewPasswordForm = Pick<Auth, 'password' | 'password_confirmation'>
+export type UpdateCurrentUserPasswordForm = Pick<Auth, 'current_password' | 'password' | 'password_confirmation'>
 
 /** Users */
 export const userSchema = authSchema.pick({
@@ -26,6 +28,7 @@ export const userSchema = authSchema.pick({
 })
 
 export type User = z.infer<typeof userSchema>
+export type UserProfileForm = Pick<User, 'name' | 'email'>
 
 /** Notes */
 const noteSchema = z.object({
