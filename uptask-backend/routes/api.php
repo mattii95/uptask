@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::put('/auth/profile', [AuthController::class, 'updateProfile']);
     Route::put('/auth/profile/update-password', [AuthController::class, 'updateCurrentUserPassword']);
+    Route::post('/auth/check-password', [AuthController::class, 'checkPassword']);
     
     // Routes Projects
     Route::controller(ProjectsController::class)->middleware([ProjectMiddleware::class])->group(function () {

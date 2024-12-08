@@ -311,4 +311,19 @@ class AuthController extends Controller
 
         return response()->json('Password update');
     }
+
+    public function checkPassword(Request $request) {
+        $user = auth()->user();
+        $validate = $request->validate([
+            'password' => 'required'
+        ]);
+
+        // Revisar password
+        if (!Hash::check($validate['password'], $user->password)) {
+            return response()->json(['error' => 'Invalid credentials'], 401);
+        }
+        
+
+        return response()->json('Password correcto');
+    }
 }
